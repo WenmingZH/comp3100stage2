@@ -65,12 +65,18 @@ public class Clientf{
 		dout.flush();
 
 		String reply3 = cl2.readMsg(new byte[32], bin);
-                //System.out.println("response to REDY: " + reply3);
+                System.out.println("response to REDY: " + reply3);
 
-		input = "GETS All";
+		String[] readlines=reply3.split(" ");
+		String core=readlines[4];
+		String memory=readlines[5];
+		String disk=readlines[6].replace("\n","");
+	
+		input = "GETS Capable" + " "+ core +" "+ memory +" "+ disk;
 		inputArr = input.getBytes();
 		dout.write(inputArr);
 		dout.flush();
+		
 		
 		String reply4 = cl2.readMsg(new byte[32], bin);
 	        //System.out.println("response to 'GETS All': " + reply4);
@@ -124,9 +130,11 @@ public class Clientf{
 		}
 		
 		String bigserver = cl2.big1.serverName + " " + cl2.big1.serverId;
-		String cap=cl2.big1.cores+" "+cl2.big1.nem+" "+cl2.big1.disk;
 		//System.out.println("Largest server is: "+ bigserver)
-
+		String bfserver = "";
+		String ffserver = "";
+		String wfserver = "";
+		
 		input = "SCHD "+0+" "+bigserver;
 		inputArr = input.getBytes();
 		dout.write(inputArr);
@@ -155,17 +163,36 @@ public class Clientf{
 			}
 			
 			else if(replytype.equals("JOBN")){
-				input = "GETS Capable" + cap;
-				inputArr = input.getBytes();
-				dout.write(inputArr);
-				dout.flush(); 
-				/*input = "SCHD " + i +" " + bigserver;
+				String[] read=replyjobs.split(" ");
+				String cores=read[4];
+				String memorys=read[5];
+				String disks=read[6].replace("\n","");
+			
+				input = "GETS Capable" + " "+ cores +" "+ memorys +" "+ disks;
 				inputArr = input.getBytes();
 				dout.write(inputArr);
 				dout.flush();
-				i++;*/	
+				
+				input = "OK";
+				inputArr = input.getBytes();
+				dout.write(inputArr);
+				dout.flush();
+				
+				String jobID=read[2];
+				
+				input = "OK";
+				inputArr = input.getBytes();
+				dout.write(inputArr);
+				dout.flush();
+				
+				input = "SCHD " + jobID +" " + bigserver;
+				inputArr = input.getBytes();
+				dout.write(inputArr);
+				dout.flush();
+				i++;	
 				
 			}
+
 			else if(replytype.equals("NONE")){
 				break;
 			}
