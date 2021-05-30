@@ -47,11 +47,17 @@ public class Client{
 		byte[] inputArr = input.getBytes();
 		dout.write(inputArr);
 		dout.flush();
+		
+		String reply = cl2.readMsg(new byte[32], bin);
+		//System.out.println("response to HELO: " + reply);
 
 		input = "AUTH "+System.getProperty("user.name");
 		inputArr = input.getBytes();
 		dout.write(inputArr);
 		dout.flush();
+
+		String reply2 = cl2.readMsg(new byte[32], bin);
+                //System.out.println("response to AUTH: " + reply2);
 
 		input = "REDY";
 		inputArr = input.getBytes();
